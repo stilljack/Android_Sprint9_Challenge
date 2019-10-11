@@ -9,6 +9,17 @@ import kotlin.random.Random
 class MapDraw(var mMap: GoogleMap) {
     val r = Random
 
+    fun dumb(x: Double, y: Double, times: Int) {
+        makeArbMarker(x, y)
+        for (i in 0 until times) {
+
+        var x = x + r.nextDouble(90.0)
+        var y = y + r.nextDouble(180.0)
+            makeArbMarker(x, y)
+    }
+}
+
+
 
     fun leftCircle(centerX: Double, centerY: Double, radius: Double) {
 
@@ -70,9 +81,9 @@ class MapDraw(var mMap: GoogleMap) {
                 }
                 else {
                     d += 2 * (x - y) + 1
-                    y--
+                    y=y-0.1
                 }
-                x++
+                x=x+0.1
             }
             while (x <= y)
         }

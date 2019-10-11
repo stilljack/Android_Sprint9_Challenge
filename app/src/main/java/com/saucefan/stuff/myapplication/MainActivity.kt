@@ -103,8 +103,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             true
         }
             R.id.alpha->{
+                val latLng =mMap.cameraPosition.target
+                val maxzoom =mMap.maxZoomLevel
+                val minzoom = mMap.minZoomLevel
+                val zoom=mMap.cameraPosition.zoom
 
 
+            alphaDraw.drawB(latLng.latitude,latLng.longitude)
             true}
 
         R.id.circle->{
@@ -114,10 +119,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             val zoom=mMap.cameraPosition.zoom
             Toast.makeText(this,"$maxzoom max + $minzoom min + $zoom current ", Toast.LENGTH_SHORT).show()
 
-                mDraw.midpointCircle( latLng.latitude,latLng.longitude, 10.0/zoom)
+                mDraw.midpointCircle( latLng.latitude-2,latLng.longitude+2, 18.0/zoom)
 
             true}
+        R.id.stupid->{
+            val latLng =mMap.cameraPosition.target
+            val maxzoom =mMap.maxZoomLevel
+            val minzoom = mMap.minZoomLevel
+            val zoom=mMap.cameraPosition.zoom
+            mDraw.dumb(latLng.latitude,latLng.longitude,10000)
 
+            true}
 
         else -> {
             super.onOptionsItemSelected(item)

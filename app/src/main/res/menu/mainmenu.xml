@@ -19,5 +19,8 @@
     <item android:id="@+id/circle"
         android:title="circle"
         app:showAsAction="never"/>
+    <item android:id="@+id/stupid"
+        android:title="stupid"
+        app:showAsAction="never"/>
 
 </menu>

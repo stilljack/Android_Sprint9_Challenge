@@ -6,14 +6,12 @@ class Alphabetdraw (val mapDraw:MapDraw){
     fun drawB(
         x:Double
               ,y:Double,
-              x2:Double,
-              y2:Double,
-              muta:String?=null) {
+              zoom:Float=1f) {
 
+        val adjzoom=zoom/1
         var x=x
         var y = y
-        var x2=x2
-        var y2=y2
+
         /*  ****************
         *  y   _
         *  ^  | \
@@ -24,27 +22,24 @@ class Alphabetdraw (val mapDraw:MapDraw){
         *  0
         *                   */
         // top -
+        var x2=x+(20*adjzoom)
+        var y2=y
+
         mapDraw.bresenhamAlgo(x,y,x2,y2)
         //backbone of B
 
+x=x2
+y2=y+(15*adjzoom)
+        // top - in f
+        mapDraw.bresenhamAlgo(x,y,x2,y2)
 
 
-
-        x=48.0
-        y =161.0
-        x2= 48.0
-        y2=180.0
-
+x=x2-(10*adjzoom)
+        x2=x
         // middle - in f
         mapDraw.bresenhamAlgo(x,y,x2,y2)
 
-        x=34.0
-        y =161.0
-        x2= 55.0
-        y2=161.0
 
-        // | in f
-        mapDraw.bresenhamAlgo(x,y,x2,y2)
 
 
 
