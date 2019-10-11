@@ -40,14 +40,12 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         chkperms()
         setSupportActionBar(findViewById(R.id.toolbar))
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.flushLocations()
-        getlocal()
+
          mediaPlayer = MediaPlayer.create(this, R.raw.mud)
 
     }
 
-    fun chkperms() {
+   private fun chkperms() {
         //check permission
         if (ContextCompat.checkSelfPermission
                 (
@@ -60,19 +58,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 this,
                 arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
                 FINE_LOCATION_REQUEST_CODE
-
             )
         } else {
-
+            getLocation()
         }
 
 }
-fun getlocal(){
-    fusedLocationClient.lastLocation
-        .addOnSuccessListener {
-            myLocation =it
-        }
-}
+
+
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -100,7 +93,8 @@ fun getlocal(){
 
 
            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(myLocation.latitude,myLocation.longitude),14f))
-            getlocal()
+            getLocation()
+            mediaPlayer.start()
          /*   fusedLocationClient.lastLocation
                 .addOnSuccessListener {
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude,it.longitude),14f))
@@ -112,9 +106,8 @@ fun getlocal(){
         }
 
         R.id.pin -> {
-
-            Toast.makeText(this,"${mMap.isMyLocationEnabled} + ${mMap.myLocation}",Toast.LENGTH_SHORT).show()
-            mMap.addMarker(MarkerOptions().position(LatLng(myLocation.latitude,myLocation.longitude)))
+            val latlng = mMap.cameraPosition.target
+            mMap.addMarker(MarkerOptions().position(latlng))
         /*    fusedLocationClient.lastLocation
                 .addOnSuccessListener {
                     mMap.addMarker(MarkerOptions().position(LatLng(it.latitude,it.longitude)))
@@ -136,10 +129,11 @@ fun getlocal(){
         if (requestCode==FINE_LOCATION_REQUEST_CODE) {
             if (permissions[0] == android.Manifest.permission.ACCESS_FINE_LOCATION
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 // if we get here we are absolutely sure we have permissions
                 getLocation()
-            }else {permissiionDeniend()} // and we land here if not permissions
+                Toast.makeText(this,"${mMap.isMyLocationEnabled} + ${mMap.myLocation}",Toast.LENGTH_SHORT).show()
+            }else {
+                permissiionDeniend()} // and we land here if not permissions
 
         }
     }
@@ -147,10 +141,18 @@ fun getlocal(){
         if (ActivityCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
         ){
+            permissiionDeniend()
+            Toast.makeText(this,"denied",Toast.LENGTH_SHORT).show()
+                }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.flushLocations()
+         fusedLocationClient.lastLocation
+            .addOnSuccessListener {
+                myLocation =it
+           // Toast.makeText(this,"it works!",Toast.LENGTH_SHORT).show()
 
-            return
         }
-        Toast.makeText(this,"it works!",Toast.LENGTH_SHORT).show()
+
     }
     fun permissiionDeniend() {
         //todo 1
