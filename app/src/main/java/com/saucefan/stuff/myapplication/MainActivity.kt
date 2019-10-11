@@ -2,6 +2,7 @@ package com.saucefan.stuff.myapplication
 
 import android.content.pm.PackageManager
 import android.location.Location
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -24,7 +25,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
-
+   lateinit var mediaPlayer: MediaPlayer
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     companion object {
         const val FINE_LOCATION_REQUEST_CODE =5
@@ -42,6 +43,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         fusedLocationClient.flushLocations()
         getlocal()
+         mediaPlayer = MediaPlayer.create(this, R.raw.mud)
+
     }
 
     fun chkperms() {
@@ -116,6 +119,7 @@ fun getlocal(){
                 .addOnSuccessListener {
                     mMap.addMarker(MarkerOptions().position(LatLng(it.latitude,it.longitude)))
                 }*/
+            mediaPlayer.start()
             true
         }
 
