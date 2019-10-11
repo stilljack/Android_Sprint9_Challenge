@@ -18,10 +18,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.saucefan.stuff.mapassign.Alphabetdraw
+import com.saucefan.stuff.mapassign.MapDraw
 
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
    lateinit var mediaPlayer: MediaPlayer
+    lateinit var mDraw:MapDraw
+    lateinit var alphaDraw:Alphabetdraw
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     companion object {
         const val FINE_LOCATION_REQUEST_CODE =5
@@ -42,6 +46,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         //stupid mud sound effect
         mediaPlayer = MediaPlayer.create(this, R.raw.mud)
 
+
+
     }
 
 
@@ -54,6 +60,15 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         mMap.setOnMapLongClickListener { latLng ->
             mMap.addMarker(MarkerOptions().position(latLng).title("whatever"))
+        }
+        //lets get stupid
+        mDraw = MapDraw(mMap)
+        alphaDraw=Alphabetdraw(mDraw)
+
+        mMap.setOnMarkerClickListener {
+
+            it.remove()
+            true
         }
     }
 
@@ -80,13 +95,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         R.id.pin -> {
             val latlng = mMap.cameraPosition.target
             mMap.addMarker(MarkerOptions().position(latlng))
-        /*    fusedLocationClient.lastLocation
+            /*    fusedLocationClient.lastLocation
                 .addOnSuccessListener {
                     mMap.addMarker(MarkerOptions().position(LatLng(it.latitude,it.longitude)))
                 }*/
             mediaPlayer.start()
             true
         }
+            R.id.alpha->{
+
+
+            true}
+
+        R.id.circle->{
+            val latLng =mMap.cameraPosition.target
+            val maxzoom =mMap.maxZoomLevel
+            val minzoom = mMap.minZoomLevel
+            val zoom=mMap.cameraPosition.zoom
+            Toast.makeText(this,"$maxzoom max + $minzoom min + $zoom current ", Toast.LENGTH_SHORT).show()
+
+                mDraw.midpointCircle( latLng.latitude,latLng.longitude, 10.0/zoom)
+
+            true}
+
+
         else -> {
             super.onOptionsItemSelected(item)
         }
