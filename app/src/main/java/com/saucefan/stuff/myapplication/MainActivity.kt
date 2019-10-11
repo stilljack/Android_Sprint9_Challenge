@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.CircleOptions
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -39,6 +40,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         chkperms()
         setSupportActionBar(findViewById(R.id.toolbar))
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        fusedLocationClient.flushLocations()
+        getlocal()
     }
 
     fun chkperms() {
@@ -57,12 +60,16 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
             )
         } else {
-            Toast.makeText(this, "Permission asked and denied", Toast.LENGTH_SHORT).show()
-            //do stuff without fine location
+
         }
 
 }
-
+fun getlocal(){
+    fusedLocationClient.lastLocation
+        .addOnSuccessListener {
+            myLocation =it
+        }
+}
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -87,19 +94,28 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.center -> {
-            fusedLocationClient.lastLocation
+
+
+           mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(myLocation.latitude,myLocation.longitude),14f))
+            getlocal()
+         /*   fusedLocationClient.lastLocation
                 .addOnSuccessListener {
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(it.latitude,it.longitude),14f))
-                }
+                }*/
          /*   if (myLocation != null) {
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(myLocation.latitude, myLocation.longitude),14f))
-            }*/
 
+            }*/
             true
         }
 
         R.id.pin -> {
 
+            Toast.makeText(this,"${mMap.isMyLocationEnabled} + ${mMap.myLocation}",Toast.LENGTH_SHORT).show()
+            mMap.addMarker(MarkerOptions().position(LatLng(myLocation.latitude,myLocation.longitude)))
+        /*    fusedLocationClient.lastLocation
+                .addOnSuccessListener {
+                    mMap.addMarker(MarkerOptions().position(LatLng(it.latitude,it.longitude)))
+                }*/
             true
         }
 
