@@ -34,7 +34,9 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         // Add a marker in Sydney and move the camera
         val sydney = LatLng(-34.0, 151.0)
         mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        mMap.setOnMapLongClickListener { latLng ->
+            mMap.addMarker(MarkerOptions().position(latLng).title("whatever"))
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -45,6 +47,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.center -> {
+
 
             true
         }
